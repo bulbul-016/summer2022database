@@ -1,0 +1,103 @@
+--1:
+--DDL commands:
+--create
+--drop
+--alter
+
+--b) DML commands:
+--insert
+--delete
+--update
+--select
+
+--2:
+create table customers
+(
+    id integer primary key,
+    full_name   varchar(50) not null ,
+    timestamp   timestamp not null ,
+    delivery_address text not null
+);
+
+create table products
+(
+    id varchar primary key,
+    name   varchar unique not null ,
+    description     text ,
+    price   double precision not null check ( price>0 )
+);
+
+create table orders
+(
+    code integer primary key,
+    customer_id integer,
+    foreign key (customer_id) references customers (id),
+    total_sum double precision not null check ( total_sum>0 ) ,
+    is_paid boolean not null
+);
+
+create table order_items
+(
+    order_code integer,
+    foreign key (order_code) references orders (code),
+    product_id varchar,
+    foreign key (product_id) references products (id),
+    quantity integer not null check ( quantity>0 ),
+    primary key (order_code, product_id)
+);
+
+--3:
+--a
+create table genders
+(
+    id integer primary key ,
+    gender_type varchar(30) not null unique
+);
+
+create table student
+(
+    id integer primary key ,
+    full_name varchar(57) not null ,
+    age integer not null check ( age>16 ),
+    birthdate date not null ,
+    gender varchar(30),
+    foreign key (gender) references genders(gender_type),
+    grade double precision not null ,
+    info_about_yourself text not null ,
+    du_need_dormitory boolean not null ,
+    additional_info text not null
+);
+
+--b
+create table instructors
+(
+    full_name varchar not null primary key ,
+    speaking_languages varchar not null ,
+    work_experience varchar not null ,
+    remote_lessons boolean not null
+);
+--4
+insert into customers
+values (1102, 'Mar Lipholt', current_timestamp, 'US, Missisippi');
+
+insert into products
+values ('91ace', 'ice-cream1', 'plombir', 295);
+values ('90cae', 'ice-cream2', 'pistachio', 155);
+
+insert into orders
+values (1962, 1101, 295, true);
+
+insert into order_items
+values (1962, '91ace', 1615 );
+
+update products
+set price = price+10
+where id= '91ace'
+
+delete
+from products
+where name='ice-cream2'
+
+
+--select * from order_items;
+--select * from products;
